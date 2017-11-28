@@ -1,14 +1,25 @@
 package uo.ri.model;
 
-public class Repuesto {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Repuesto  {
 
 	private String codigo;
 	private String descripcion;
 	private double precio;
-
+	
+	private Set<Sustitucion> sustituciones = new HashSet<>();
+	
 	public Repuesto(String codigo) {
 		super();
 		this.codigo = codigo;
+	}
+
+	public Repuesto(String codigo, String descripcion, double precio) {
+		this( codigo );
+		this.descripcion = descripcion;
+		this.precio = precio;
 	}
 
 	public String getDescripcion() {
@@ -29,6 +40,14 @@ public class Repuesto {
 
 	public String getCodigo() {
 		return codigo;
+	}
+
+	Set<Sustitucion> _getSustituciones() {
+		return sustituciones;
+	}
+
+	public Set<Sustitucion> getSustituciones() {
+		return new HashSet<>( sustituciones );
 	}
 
 	@Override
@@ -60,5 +79,5 @@ public class Repuesto {
 	public String toString() {
 		return "Repuesto [codigo=" + codigo + ", descripcion=" + descripcion + ", precio=" + precio + "]";
 	}
-
+	
 }

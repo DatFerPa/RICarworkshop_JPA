@@ -12,18 +12,20 @@ public class Averia {
 	private Date fecha;
 	private double importe = 0.0;
 	private AveriaStatus status = AveriaStatus.ABIERTA;
+	
 	private Vehiculo vehiculo;
+	private Mecanico mecanico;
 	private Set<Intervencion> intervenciones = new HashSet<>();
-
+	private Factura factura;
+	
 	public Averia(Vehiculo vehiculo) {
 		super();
-		this.vehiculo = vehiculo;
+		this.fecha = new Date();
 		Association.Averiar.link(vehiculo, this);
-		fecha = new Date();
 	}
 
 	public Averia(Vehiculo vehiculo, String descripcion) {
-		this(vehiculo);
+		this( vehiculo );
 		this.descripcion = descripcion;
 	}
 
@@ -34,19 +36,7 @@ public class Averia {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-
-	public Date getFecha() {
-		return fecha;
-	}
-
-	public double getImporte() {
-		return importe;
-	}
-
-	public AveriaStatus getStatus() {
-		return status;
-	}
-
+	
 	public Vehiculo getVehiculo() {
 		return vehiculo;
 	}
@@ -54,15 +44,42 @@ public class Averia {
 	void _setVehiculo(Vehiculo vehiculo) {
 		this.vehiculo = vehiculo;
 	}
-	
-	
+
+	public Date getFecha() {
+		return (Date) fecha.clone(); // hay que hacer esto porque son mutables
+	}
+
+	public double getImporte() {
+		calcularImporte();
+		return importe;
+	}
+
+	public AveriaStatus getStatus() {
+		return status;
+	}
+
+	public Mecanico getMecanico() {
+		return mecanico;
+	}
+
+	void _setMecanico(Mecanico mecanico) {
+		this.mecanico = mecanico;
+	}
+
+	Set<Intervencion> _getIntervenciones() {
+		return intervenciones;
+	}
 
 	public Set<Intervencion> getIntervenciones() {
-		return new HashSet<>(intervenciones);
+		return new HashSet<>( intervenciones );
 	}
-	
-	 Set<Intervencion> _getIntervenciones() {
-		return intervenciones;
+
+	public Factura getFactura() {
+		return factura;
+	}
+
+	void _setFactura(Factura factura) {
+		this.factura = factura;
 	}
 
 	@Override
@@ -96,25 +113,24 @@ public class Averia {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Averia [descripcion=" + descripcion + ", fecha=" + fecha + ", importe=" + importe + ", status=" + status
-				+ ", vehiculo=" + vehiculo + "]";
-	}
-
 	/**
 	 * Asigna la averia al mecanico
-	 * 
 	 * @param mecanico
 	 */
 	public void assignTo(Mecanico mecanico) {
 		// Solo se puede asignar una averia que está ABIERTA
 		// linkado de averia y mecanico
 		// la averia pasa a ASIGNADA
+		if( status.equals( AveriaStatus.ABIERTA ) ) {
+			Association.Asignar.link(mecanico, this);
+			status = AveriaStatus.ASIGNADA;
+		}
 	}
 
+
 	/**
-	 * El mecánico da por finalizada esta avería, entonces se calcula el importe
+	 * El mecánico da por finalizada esta avería, entonces se calcula el 
+	 * importe
 	 * 
 	 */
 	public void markAsFinished() {
@@ -122,15 +138,34 @@ public class Averia {
 		// se calcula el importe
 		// se desvincula mecanico y averia
 		// el status cambia a TERMINADA
+		if( status.equals( AveriaStatus.ASIGNADA ) ) {
+			//calcular importe
+			calcularImporte();
+			Association.Asignar.unlink(mecanico, this);
+			status = AveriaStatus.TERMINADA;
+		}
+			
+	}
+	
+	private void calcularImporte() {
+		importe = 0;
+		for(Intervencion i : intervenciones) {
+			importe += i.getImporte();
+		}
 	}
 
+
 	/**
-	 * Una averia en estado TERMINADA se puede asignar a otro mecánico (el primero
-	 * no ha podido terminar la reparación), pero debe ser pasada a ABIERTA primero
+	 * Una averia en estado TERMINADA se puede asignar a otro mecánico
+	 * (el primero no ha podido terminar la reparación), pero debe ser pasada 
+	 * a ABIERTA primero
 	 */
 	public void reopen() {
 		// Solo se puede reabrir una averia que está TERMINADA
 		// la averia pasa a ABIERTA
+		if( status.equals(AveriaStatus.TERMINADA) ) {
+			status = AveriaStatus.ABIERTA;
+		}
 	}
 
 	/**
@@ -139,5 +174,22 @@ public class Averia {
 	public void markBackToFinished() {
 		// verificar que la averia está FACTURADA
 		// cambiar status a TERMINADA
+		if( status.equals( AveriaStatus.FACTURADA ) ) {
+			status = AveriaStatus.TERMINADA;
+		}
 	}
+
+	@Override
+	public String toString() {
+		return "Averia [descripcion=" + descripcion + ", fecha=" + fecha + ", importe=" + importe + ", status=" + status
+				+ ", vehiculo=" + vehiculo + "]";
+	}
+
+	/**
+	 * Cambia el estado de la avería a facturada
+	 */
+	public void markAsInvoiced() {
+		status = AveriaStatus.FACTURADA;
+	}
+	
 }
