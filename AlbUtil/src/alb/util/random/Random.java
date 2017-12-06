@@ -18,4 +18,12 @@ public class Random {
 		return res;
 	}
 
+	public static String string(char min, char max, int length) {
+		String res = "";
+		for(int i = 0; i < length; i++) {
+			res += (char) Random.integer(min, max+1).intValue();
+		}
+		return res;
+	}
+
 }
