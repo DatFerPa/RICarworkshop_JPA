@@ -2,6 +2,9 @@ package uo.ri.model;
 
 import java.util.Date;
 
+import alb.util.date.DateUtil;
+import uo.ri.model.exception.BusinessException;
+
 public class TarjetaCredito extends MedioPago {
 
 	private String numero;
@@ -11,6 +14,14 @@ public class TarjetaCredito extends MedioPago {
 	public TarjetaCredito(String numero) {
 		super();
 		this.numero = numero;
+		this.validez = DateUtil.tomorrow();
+		this.tipo = "UNKNOWN";
+	}
+	
+	public TarjetaCredito(String numero,String tipo,Date validez) {
+		this(numero);
+		this.tipo = tipo;
+		this.validez = validez;
 	}
 
 	public String getTipo() {
@@ -62,5 +73,22 @@ public class TarjetaCredito extends MedioPago {
 			return false;
 		return true;
 	}
+
+	public void pagar(double i) throws BusinessException{
+		if(isValidNow()) {
+			this.acumulado += i;
+		}else {
+			throw new BusinessException("No se puede pagar con una tarjeta de crédito que tenga una fecha atrasada");
+		}
+				
+	}
+	
+	
+
+	public boolean isValidNow() {
+		return (validez.after(DateUtil.today()))?true:false;
+	}
+
+
 
 }

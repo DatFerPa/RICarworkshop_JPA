@@ -8,6 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 	uo.ri.associations.AllTests.class,
+	uo.ri.amp.AllTests.class,
 	uo.ri.domain.AllTests.class,
 })
 public class AllTests { }

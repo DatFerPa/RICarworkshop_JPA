@@ -3,6 +3,8 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import uo.ri.model.exception.BusinessException;
+
 public abstract class MedioPago {
 
 	protected double acumulado = 0.0;
@@ -58,5 +60,8 @@ public abstract class MedioPago {
 			return false;
 		return true;
 	}
+	
+	public abstract void pagar(double i) throws BusinessException ;
+		
 	
 }

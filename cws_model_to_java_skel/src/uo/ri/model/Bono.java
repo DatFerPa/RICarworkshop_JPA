@@ -1,14 +1,23 @@
 package uo.ri.model;
 
+import uo.ri.model.exception.BusinessException;
+
 public class Bono extends MedioPago {
 
 	private double disponible = 0.0;
 	private String descripcion;
 	private String codigo;
 
-	public Bono(String codigo) {
+	public Bono(String codigo, double disponible) {
 		super();
 		this.codigo = codigo;
+		this.disponible = disponible;
+		this.descripcion = "";
+	}
+	
+	public Bono(String codigo,String descripcion, double disponible ) {
+		this(codigo,disponible);
+		this.descripcion = descripcion;
 	}
 
 	public double getDisponible() {
@@ -60,5 +69,18 @@ public class Bono extends MedioPago {
 			return false;
 		return true;
 	}
+
+	public void pagar(double i) throws BusinessException {
+		if (this.disponible >= i) {
+			this.acumulado += i;
+			this.disponible -= i;
+		} else {
+			throw new BusinessException(
+					"No se puede pagar con un bono que tenga un saldo inferior al inporte que se quiere pagar");
+		}
+
+	}
+
+
 
 }

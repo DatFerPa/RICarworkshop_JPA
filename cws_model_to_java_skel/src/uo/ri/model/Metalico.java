@@ -6,6 +6,9 @@ public class Metalico extends MedioPago {
 		Association.Pagar.link(cliente,this);
 	}
 	
-	
+	public void pagar(double i) {
+		this.acumulado += i;
+	}
+
 
 }

@@ -8,17 +8,17 @@ public class Mecanico {
 	private String dni;
 	private String apellidos;
 	private String nombre;
-	
+
 	private Set<Averia> asignadas = new HashSet<>();
 	private Set<Intervencion> intervenciones = new HashSet<>();
-	
+
 	public Mecanico(String dni) {
 		super();
 		this.dni = dni;
 	}
 
 	public Mecanico(String dni, String nombre, String apellidos) {
-		this( dni );
+		this(dni);
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 	}
@@ -46,9 +46,9 @@ public class Mecanico {
 	Set<Averia> _getAsignadas() {
 		return asignadas;
 	}
-	
+
 	public Set<Averia> getAsignadas() {
-		return new HashSet<>( asignadas );
+		return new HashSet<>(asignadas);
 	}
 
 	Set<Intervencion> _getIntervenciones() {
@@ -56,7 +56,7 @@ public class Mecanico {
 	}
 
 	public Set<Intervencion> getIntervenciones() {
-		return new HashSet<>( intervenciones );
+		return new HashSet<>(intervenciones);
 	}
 
 	@Override

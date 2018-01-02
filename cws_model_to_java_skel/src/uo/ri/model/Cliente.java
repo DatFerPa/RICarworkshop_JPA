@@ -11,15 +11,17 @@ public class Cliente {
 	private String nombre;
 	private String apellidos;
 	private Address address;
+	private String telefono;
+	private String email;
 	private Set<Vehiculo> vehiculos = new HashSet<Vehiculo>();
 	private Set<MedioPago> mediosPago = new HashSet<>();
+	private Set<Recomendacion> recomendaciones = new HashSet<>();
+	private Recomendacion recomendacion_recibida;
 
 	public Cliente(String dni) {
 		super();
 		this.dni = dni;
 	}
-	
-	
 
 	public Cliente(String dni, String nombre, String apellidos) {
 		this(dni);
@@ -27,7 +29,12 @@ public class Cliente {
 		this.apellidos = apellidos;
 	}
 
-
+	public Cliente(String dni, String nombre, String apellidos, String telefono, String email, Address address) {
+		this(dni, nombre, apellidos);
+		this.setTelefono(telefono);
+		this.email = email;
+		this.address = address;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -55,28 +62,56 @@ public class Cliente {
 
 	public String getDni() {
 		return dni;
-	}		
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Set<Vehiculo> getVehiculos() {
 		return new HashSet<>(vehiculos);
 	}
-	
-	 Set<Vehiculo> _getVehiculos() {
-		
+
+	Set<Vehiculo> _getVehiculos() {
+
 		return vehiculos;
 	}
-	 
-	 
 
 	public Set<MedioPago> getMediosPago() {
 		return new HashSet<>(mediosPago);
 	}
-	
-	 Set<MedioPago> _getMediosPago() {
+
+	Set<MedioPago> _getMediosPago() {
 		return mediosPago;
 	}
+	
+	public Set<Recomendacion> getRecomendacionesHechas() {
+		return new HashSet<>(recomendaciones);
+	}
+	
+	Set<Recomendacion> _getRecomendacionesHechas(){
+		return recomendaciones;
+	}
+	
+	public Recomendacion getRecomendacionRecibida() {
+		return recomendacion_recibida;
+	}
 
-
+	 void _setRecomendacionRecibida(Recomendacion recomendacion_recibida) {
+		this.recomendacion_recibida = recomendacion_recibida;
+	}
 
 	@Override
 	public int hashCode() {
@@ -107,8 +142,9 @@ public class Cliente {
 	public String toString() {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", address=" + address + "]";
 	}
+
 	
-	
+
 	
 
 }

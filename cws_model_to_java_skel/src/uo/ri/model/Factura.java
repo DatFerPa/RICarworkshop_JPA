@@ -17,11 +17,12 @@ public class Factura {
 	private Date fecha;
 	private double importe;
 	private double iva;
+	private boolean usada_bono;
 	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
-	
+
 	private Set<Averia> averias = new HashSet<>();
 	private Set<Cargo> cargos = new HashSet<>();
-	
+
 	public Factura(Long numero) {
 		super();
 		this.numero = numero;
@@ -29,16 +30,16 @@ public class Factura {
 	}
 
 	public Factura(long numero, Date fecha) {
-		this( numero );
+		this(numero);
 		this.fecha = fecha;
 	}
 
 	public Factura(long numero, List<Averia> averias) throws BusinessException {
-		this( numero );
+		this(numero);
 		this.fecha = DateUtil.today();
-		
-		for( Averia a : averias ) {
-			if( !a.getStatus().equals(AveriaStatus.TERMINADA) ) 
+
+		for (Averia a : averias) {
+			if (!a.getStatus().equals(AveriaStatus.TERMINADA))
 				throw new BusinessException("Alguna de las averías no está terminada");
 			Association.Facturar.link(a, this);
 			a.markAsInvoiced();
@@ -46,15 +47,15 @@ public class Factura {
 	}
 
 	public Factura(long numero, Date fecha, List<Averia> averias) throws BusinessException {
-		this( numero, fecha );
+		this(numero, fecha);
 
-		for( Averia a : averias ) {
-			if( !a.getStatus().equals(AveriaStatus.TERMINADA) ) 
+		for (Averia a : averias) {
+			if (!a.getStatus().equals(AveriaStatus.TERMINADA))
 				throw new BusinessException("Alguna de las averías no está terminada");
 			Association.Facturar.link(a, this);
 			a.markAsInvoiced();
 		}
-		
+
 	}
 
 	public Date getFecha() {
@@ -68,7 +69,7 @@ public class Factura {
 	public double getIva() {
 		return iva;
 	}
-	
+
 	public Long getNumero() {
 		return numero;
 	}
@@ -76,6 +77,14 @@ public class Factura {
 	public double getImporte() {
 		calcularImporte();
 		return importe;
+	}
+
+	public boolean isUsada_bono() {
+		return usada_bono;
+	}
+
+	public void setUsada_bono(boolean usada_bono) {
+		this.usada_bono = usada_bono;
 	}
 
 	public FacturaStatus getStatus() {
@@ -87,7 +96,7 @@ public class Factura {
 	}
 
 	public Set<Averia> getAverias() {
-		return new HashSet<>( averias );
+		return new HashSet<>(averias);
 	}
 
 	Set<Cargo> _getCargos() {
@@ -95,7 +104,7 @@ public class Factura {
 	}
 
 	public Set<Cargo> getCargos() {
-		return new HashSet<>( cargos );
+		return new HashSet<>(cargos);
 	}
 
 	@Override
@@ -124,7 +133,8 @@ public class Factura {
 	}
 
 	/**
-	 * Añade  la averia a la factura
+	 * Añade la averia a la factura
+	 * 
 	 * @param averia
 	 */
 	public void addAveria(Averia averia) {
@@ -133,8 +143,7 @@ public class Factura {
 		// linkar factura y averia
 		// marcar la averia como FACTURADA ( averia.markAsInvoiced() )
 		// calcular el importe
-		if( status.equals( FacturaStatus.SIN_ABONAR )
-				&& averia.getStatus().equals( AveriaStatus.TERMINADA ) ) {
+		if (status.equals(FacturaStatus.SIN_ABONAR) && averia.getStatus().equals(AveriaStatus.TERMINADA)) {
 			Association.Facturar.link(averia, this);
 			averia.markAsInvoiced();
 			calcularImporte();
@@ -142,7 +151,7 @@ public class Factura {
 	}
 
 	/**
-	 * Calcula el importe de la avería y su IVA, teniendo en cuenta la fecha de 
+	 * Calcula el importe de la avería y su IVA, teniendo en cuenta la fecha de
 	 * factura
 	 */
 	void calcularImporte() {
@@ -150,17 +159,18 @@ public class Factura {
 		// importe = ...
 		iva = (fecha.getTime() > DateUtil.fromDdMmYyyy(1, 7, 2012).getTime()) ? .21 : .18;
 		importe = 0;
-		for(Averia a : averias) {
+		for (Averia a : averias) {
 			importe += a.getImporte();
-	
+
 		}
 		importe *= 1 + iva;
-		importe = Round.twoCents( importe );
+		importe = Round.twoCents(importe);
 	}
-	
+
 	/**
-	 * Elimina una averia de la factura, solo si está SIN_ABONAR y recalcula 
-	 * el importe
+	 * Elimina una averia de la factura, solo si está SIN_ABONAR y recalcula el
+	 * importe
+	 * 
 	 * @param averia
 	 */
 	public void removeAveria(Averia averia) {
@@ -168,7 +178,7 @@ public class Factura {
 		// desenlazar factura y averia
 		// la averia vuelve al estado FINALIZADA ( averia.markBackToFinished() )
 		// volver a calcular el importe
-		if( status.equals( FacturaStatus.SIN_ABONAR ) ) {
+		if (status.equals(FacturaStatus.SIN_ABONAR)) {
 			Association.Facturar.unlink(averia, this);
 			averia.markBackToFinished();
 			// volver a calcular el importe

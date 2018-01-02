@@ -14,7 +14,7 @@ public class Vehiculo {
 	private Cliente cliente;
 
 	private TipoVehiculo tipoVehiculo;
-	
+
 	private Set<Averia> averias = new HashSet<>();
 
 	public Vehiculo(String matricula) {
@@ -72,13 +72,12 @@ public class Vehiculo {
 	void _setTipo(TipoVehiculo tipoVehiculo) {
 		this.tipoVehiculo = tipoVehiculo;
 	}
-	
-	
 
 	public Set<Averia> getAverias() {
-		return new HashSet<>( averias);
+		return new HashSet<>(averias);
 	}
-	 Set<Averia> _getAverias() {
+
+	Set<Averia> _getAverias() {
 		return averias;
 	}
 
