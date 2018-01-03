@@ -7,20 +7,33 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import alb.util.date.DateUtil;
+import uo.ri.model.exception.BusinessException;
+
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class TarjetaCredito extends MedioPago {
 
-	@Column(unique=true)private String numero;
+	@Column(unique = true)
+	private String numero;
 	private String tipo;
 	private Date validez;
+
+	TarjetaCredito() {
+	}
 
 	public TarjetaCredito(String numero) {
 		super();
 		this.numero = numero;
+		this.validez = DateUtil.tomorrow();
+		this.tipo = "UNKNOWN";
 	}
-	
-	TarjetaCredito(){}
+
+	public TarjetaCredito(String numero, String tipo, Date validez) {
+		this(numero);
+		this.tipo = tipo;
+		this.validez = validez;
+	}
 
 	public String getTipo() {
 		return tipo;
@@ -70,6 +83,19 @@ public class TarjetaCredito extends MedioPago {
 		} else if (!numero.equals(other.numero))
 			return false;
 		return true;
+	}
+
+	public void pagar(double i) throws BusinessException {
+		if (isValidNow()) {
+			this.acumulado += i;
+		} else {
+			throw new BusinessException("No se puede pagar con una tarjeta de crédito que tenga una fecha atrasada");
+		}
+
+	}
+
+	public boolean isValidNow() {
+		return (validez.after(DateUtil.today())) ? true : false;
 	}
 
 }

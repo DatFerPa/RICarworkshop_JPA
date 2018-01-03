@@ -17,8 +17,8 @@ public class TarjetaCredito extends MedioPago {
 		this.validez = DateUtil.tomorrow();
 		this.tipo = "UNKNOWN";
 	}
-	
-	public TarjetaCredito(String numero,String tipo,Date validez) {
+
+	public TarjetaCredito(String numero, String tipo, Date validez) {
 		this(numero);
 		this.tipo = tipo;
 		this.validez = validez;
@@ -74,21 +74,17 @@ public class TarjetaCredito extends MedioPago {
 		return true;
 	}
 
-	public void pagar(double i) throws BusinessException{
-		if(isValidNow()) {
+	public void pagar(double i) throws BusinessException {
+		if (isValidNow()) {
 			this.acumulado += i;
-		}else {
+		} else {
 			throw new BusinessException("No se puede pagar con una tarjeta de crédito que tenga una fecha atrasada");
 		}
-				
+
 	}
-	
-	
 
 	public boolean isValidNow() {
-		return (validez.after(DateUtil.today()))?true:false;
+		return (validez.after(DateUtil.today())) ? true : false;
 	}
-
-
 
 }

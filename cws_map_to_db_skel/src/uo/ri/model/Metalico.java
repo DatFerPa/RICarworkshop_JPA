@@ -5,13 +5,18 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Metalico extends MedioPago {
-	
-	public Metalico(Cliente cliente) {
-		Association.Pagar.link(this,cliente);
+
+	Metalico() {
 	}
-	
-	Metalico(){}
+
+	public Metalico(Cliente cliente) {
+		Association.Pagar.link(this, cliente);
+	}
+
+	public void pagar(double i) {
+		this.acumulado += i;
+	}
 
 }

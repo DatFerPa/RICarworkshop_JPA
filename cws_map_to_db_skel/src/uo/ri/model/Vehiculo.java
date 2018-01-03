@@ -13,7 +13,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Vehiculo {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String marca;
 	private String matricula;
@@ -21,18 +22,22 @@ public class Vehiculo {
 
 	private int numAverias = 0;
 
-	@ManyToOne private Cliente cliente;
+	@ManyToOne
+	private Cliente cliente;
 
-	@ManyToOne private TipoVehiculo tipoVehiculo;
-	
-	@OneToMany(mappedBy="vehiculo")private Set<Averia> averias = new HashSet<>();
+	@ManyToOne
+	private TipoVehiculo tipoVehiculo;
+
+	@OneToMany(mappedBy = "vehiculo")
+	private Set<Averia> averias = new HashSet<>();
+
+	Vehiculo() {
+	}
 
 	public Vehiculo(String matricula) {
 		super();
 		this.matricula = matricula;
 	}
-	
-	Vehiculo(){}
 
 	public Vehiculo(String matricula, String marca, String modelo) {
 		this(matricula);
@@ -51,15 +56,13 @@ public class Vehiculo {
 	public String getModelo() {
 		return modelo;
 	}
-	
-	
-
-	public Long getId() {
-		return id;
-	}
 
 	public void setModelo(String modelo) {
 		this.modelo = modelo;
+	}
+	
+	public long getId() {
+		return id;
 	}
 
 	public int getNumAverias() {
@@ -90,13 +93,12 @@ public class Vehiculo {
 	void _setTipo(TipoVehiculo tipoVehiculo) {
 		this.tipoVehiculo = tipoVehiculo;
 	}
-	
-	
 
 	public Set<Averia> getAverias() {
-		return new HashSet<>( averias);
+		return new HashSet<>(averias);
 	}
-	 Set<Averia> _getAverias() {
+
+	Set<Averia> _getAverias() {
 		return averias;
 	}
 

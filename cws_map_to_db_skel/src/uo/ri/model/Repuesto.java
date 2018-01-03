@@ -10,22 +10,25 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Repuesto  {
-	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+public class Repuesto {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String codigo;
 	private String descripcion;
 	private double precio;
-	
-	@OneToMany(mappedBy="sustitucion") private Set<Sustitucion> sustituciones = new HashSet<>();
-	
+
+	@OneToMany(mappedBy = "sustitucion")
+	private Set<Sustitucion> sustituciones = new HashSet<>();
+
+	Repuesto() {
+	}
+
 	public Repuesto(String codigo) {
 		super();
 		this.codigo = codigo;
 	}
-	
-	Repuesto(){}
 
 	public Repuesto(String codigo, String descripcion, double precio) {
 		this( codigo );
@@ -90,5 +93,5 @@ public class Repuesto  {
 	public String toString() {
 		return "Repuesto [codigo=" + codigo + ", descripcion=" + descripcion + ", precio=" + precio + "]";
 	}
-	
+
 }

@@ -12,22 +12,26 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames="AVERIA_ID, MECANICO_ID")})
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = "AVERIA_ID, MECANICO_ID") })
 public class Intervencion {
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	private Averia averia;
 	private Mecanico mecanico;
 	private int minutos;
-	
-	@OneToMany(mappedBy="intervencion")private Set<Sustitucion> sustituciones = new HashSet<>();
-	
+
+	@OneToMany(mappedBy = "intervencion")
+	private Set<Sustitucion> sustituciones = new HashSet<>();
+
+	Intervencion() {
+	}
+
 	public Intervencion(Averia averia, Mecanico mecanico) {
 		super();
 		Association.Intervenir.link(averia, this, mecanico);
 	}
-	
-	Intervencion(){}
 
 	public Intervencion(Mecanico mecanico, Averia averia) {
 		super();
@@ -44,12 +48,6 @@ public class Intervencion {
 
 	public Mecanico getMecanico() {
 		return mecanico;
-	}
-	
-	
-
-	public Long getId() {
-		return id;
 	}
 
 	void _setMecanico(Mecanico mecanico) {
@@ -69,7 +67,7 @@ public class Intervencion {
 	}
 
 	public Set<Sustitucion> getSustituciones() {
-		return new HashSet<>( sustituciones );
+		return new HashSet<>(sustituciones);
 	}
 
 	@Override
@@ -116,16 +114,15 @@ public class Intervencion {
 	}
 
 	private double calcularManoDeObra() {
-		double precioMin = averia.getVehiculo().getTipo().getPrecioHora()/60;
+		double precioMin = averia.getVehiculo().getTipo().getPrecioHora() / 60;
 		return precioMin * minutos;
 	}
 
 	private double calcularImporteRepuestos() {
 		double importe = 0;
-		for(Sustitucion s : sustituciones) {
+		for (Sustitucion s : sustituciones) {
 			importe += s.getImporte();
 		}
 		return importe;
 	}
-	
 }

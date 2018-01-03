@@ -71,7 +71,7 @@ public class PagarTest {
 
 	@Test
 	public void testPagarRemove() throws BusinessException {
-		Association.Pagar.unlink(cliente, metalico);
+		Association.Pagar.unlink(metalico, cliente);
 		
 		assertTrue( ! cliente.getMediosPago().contains( metalico ));
 		assertTrue( cliente.getMediosPago().size() == 0 );

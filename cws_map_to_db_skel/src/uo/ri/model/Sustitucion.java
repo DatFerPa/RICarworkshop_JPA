@@ -8,18 +8,22 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames="REPUESTO_ID, INTERVENCION_ID")})
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = "REPUESTO_ID, INTERVENCION_ID") })
 public class Sustitucion {
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	private Repuesto repuesto;
 	private Intervencion intervencion;
 	private int cantidad;
 
+	Sustitucion() {
+	}
+
 	public Sustitucion(Repuesto repuesto, Intervencion intervencion) {
 		Association.Sustituir.link(repuesto, this, intervencion);
 	}
-	Sustitucion() {}
 
 	public Repuesto getRepuesto() {
 		return repuesto;
@@ -84,5 +88,5 @@ public class Sustitucion {
 	public double getImporte() {
 		return cantidad * repuesto.getPrecio();
 	}
-		
+
 }

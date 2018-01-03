@@ -8,15 +8,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
 @Entity
 public class TipoVehiculo {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nombre;
 	private double precioHora;
 
-	@OneToMany(mappedBy="tipoVehiculo") private Set<Vehiculo> vehiculos = new HashSet<Vehiculo>();
+	@OneToMany(mappedBy = "tipoVehiculo")
+	private Set<Vehiculo> vehiculos = new HashSet<Vehiculo>();
+
+	TipoVehiculo() {
+	}
 
 	public TipoVehiculo(String nombre) {
 		super();
@@ -27,8 +33,6 @@ public class TipoVehiculo {
 		this(nombre);
 		this.precioHora = precioHora;
 	}
-	
-	TipoVehiculo(){}
 
 	public double getPrecioHora() {
 		return precioHora;
