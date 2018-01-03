@@ -40,13 +40,14 @@ public class Recomendacion {
 		Association.Recomendar.unlink(recomendador, this, recomendado);
 	}
 
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((recomendado == null) ? 0 : recomendado.hashCode());
 		result = prime * result + ((recomendador == null) ? 0 : recomendador.hashCode());
-		result = prime * result + (usada_bono ? 1231 : 1237);
 		return result;
 	}
 
@@ -68,8 +69,6 @@ public class Recomendacion {
 			if (other.recomendador != null)
 				return false;
 		} else if (!recomendador.equals(other.recomendador))
-			return false;
-		if (usada_bono != other.usada_bono)
 			return false;
 		return true;
 	}

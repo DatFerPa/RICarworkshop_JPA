@@ -94,9 +94,10 @@ public class Association {
 		public static void unlink(Cargo cargo) {
 			cargo.getFactura()._getCargos().remove(cargo);
 			cargo.getMedioPago()._getCargos().remove(cargo);
-
-			cargo._setFactura(null);
+			
 			cargo._setMedioPago(null);
+			cargo._setFactura(null);
+			
 		}
 	}
 

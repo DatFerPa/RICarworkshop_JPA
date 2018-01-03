@@ -106,6 +106,8 @@ public class Factura {
 	public Set<Cargo> getCargos() {
 		return new HashSet<>(cargos);
 	}
+	
+	
 
 	@Override
 	public int hashCode() {
@@ -190,6 +192,10 @@ public class Factura {
 	public String toString() {
 		return "Factura [numero=" + numero + ", fecha=" + fecha + ", importe=" + importe + ", iva=" + iva + ", status="
 				+ status + "]";
+	}
+
+	public void settle() {
+		this.status = FacturaStatus.ABONADA;
 	}
 
 }

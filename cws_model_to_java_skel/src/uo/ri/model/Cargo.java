@@ -66,9 +66,6 @@ public class Cargo {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((factura == null) ? 0 : factura.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(importe);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((medioPago == null) ? 0 : medioPago.hashCode());
 		return result;
 	}
@@ -86,8 +83,6 @@ public class Cargo {
 			if (other.factura != null)
 				return false;
 		} else if (!factura.equals(other.factura))
-			return false;
-		if (Double.doubleToLongBits(importe) != Double.doubleToLongBits(other.importe))
 			return false;
 		if (medioPago == null) {
 			if (other.medioPago != null)

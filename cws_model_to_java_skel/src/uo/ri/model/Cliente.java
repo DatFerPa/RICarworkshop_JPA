@@ -1,6 +1,8 @@
 package uo.ri.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import uo.ri.model.types.Address;
@@ -141,6 +143,19 @@ public class Cliente {
 	@Override
 	public String toString() {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", address=" + address + "]";
+	}
+
+	public List<Averia> getAveriasBono3NoUsadas() {
+		List<Averia> listaAveriasBono3NoUsadas = new ArrayList<>();
+		for(Vehiculo vehiculo: vehiculos) {
+			for(Averia averia:vehiculo.getAverias()) {
+				if(averia.esElegibleParaBono3()) {
+					listaAveriasBono3NoUsadas.add(averia);
+				}
+			}
+		}
+		
+		return listaAveriasBono3NoUsadas;
 	}
 
 	

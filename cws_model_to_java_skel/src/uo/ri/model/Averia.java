@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import uo.ri.model.types.AveriaStatus;
+import uo.ri.model.types.FacturaStatus;
 
 public class Averia {
 
@@ -12,20 +13,22 @@ public class Averia {
 	private Date fecha;
 	private double importe = 0.0;
 	private AveriaStatus status = AveriaStatus.ABIERTA;
-	
+
 	private Vehiculo vehiculo;
 	private Mecanico mecanico;
 	private Set<Intervencion> intervenciones = new HashSet<>();
 	private Factura factura;
-	
+	private boolean usada_bono;
+
 	public Averia(Vehiculo vehiculo) {
 		super();
 		this.fecha = new Date();
 		Association.Averiar.link(vehiculo, this);
+		this.usada_bono = false;
 	}
 
 	public Averia(Vehiculo vehiculo, String descripcion) {
-		this( vehiculo );
+		this(vehiculo);
 		this.descripcion = descripcion;
 	}
 
@@ -36,7 +39,7 @@ public class Averia {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	
+
 	public Vehiculo getVehiculo() {
 		return vehiculo;
 	}
@@ -71,7 +74,7 @@ public class Averia {
 	}
 
 	public Set<Intervencion> getIntervenciones() {
-		return new HashSet<>( intervenciones );
+		return new HashSet<>(intervenciones);
 	}
 
 	public Factura getFactura() {
@@ -80,6 +83,10 @@ public class Averia {
 
 	void _setFactura(Factura factura) {
 		this.factura = factura;
+	}
+
+	public boolean isUsada_bono() {
+		return usada_bono;
 	}
 
 	@Override
@@ -115,22 +122,21 @@ public class Averia {
 
 	/**
 	 * Asigna la averia al mecanico
+	 * 
 	 * @param mecanico
 	 */
 	public void assignTo(Mecanico mecanico) {
 		// Solo se puede asignar una averia que está ABIERTA
 		// linkado de averia y mecanico
 		// la averia pasa a ASIGNADA
-		if( status.equals( AveriaStatus.ABIERTA ) ) {
+		if (status.equals(AveriaStatus.ABIERTA)) {
 			Association.Asignar.link(mecanico, this);
 			status = AveriaStatus.ASIGNADA;
 		}
 	}
 
-
 	/**
-	 * El mecánico da por finalizada esta avería, entonces se calcula el 
-	 * importe
+	 * El mecánico da por finalizada esta avería, entonces se calcula el importe
 	 * 
 	 */
 	public void markAsFinished() {
@@ -138,32 +144,30 @@ public class Averia {
 		// se calcula el importe
 		// se desvincula mecanico y averia
 		// el status cambia a TERMINADA
-		if( status.equals( AveriaStatus.ASIGNADA ) ) {
-			//calcular importe
+		if (status.equals(AveriaStatus.ASIGNADA)) {
+			// calcular importe
 			calcularImporte();
 			Association.Asignar.unlink(mecanico, this);
 			status = AveriaStatus.TERMINADA;
 		}
-			
+
 	}
-	
+
 	private void calcularImporte() {
 		importe = 0;
-		for(Intervencion i : intervenciones) {
+		for (Intervencion i : intervenciones) {
 			importe += i.getImporte();
 		}
 	}
 
-
 	/**
-	 * Una averia en estado TERMINADA se puede asignar a otro mecánico
-	 * (el primero no ha podido terminar la reparación), pero debe ser pasada 
-	 * a ABIERTA primero
+	 * Una averia en estado TERMINADA se puede asignar a otro mecánico (el primero
+	 * no ha podido terminar la reparación), pero debe ser pasada a ABIERTA primero
 	 */
 	public void reopen() {
 		// Solo se puede reabrir una averia que está TERMINADA
 		// la averia pasa a ABIERTA
-		if( status.equals(AveriaStatus.TERMINADA) ) {
+		if (status.equals(AveriaStatus.TERMINADA)) {
 			status = AveriaStatus.ABIERTA;
 		}
 	}
@@ -174,7 +178,7 @@ public class Averia {
 	public void markBackToFinished() {
 		// verificar que la averia está FACTURADA
 		// cambiar status a TERMINADA
-		if( status.equals( AveriaStatus.FACTURADA ) ) {
+		if (status.equals(AveriaStatus.FACTURADA)) {
 			status = AveriaStatus.TERMINADA;
 		}
 	}
@@ -182,7 +186,8 @@ public class Averia {
 	@Override
 	public String toString() {
 		return "Averia [descripcion=" + descripcion + ", fecha=" + fecha + ", importe=" + importe + ", status=" + status
-				+ ", vehiculo=" + vehiculo + "]";
+				+ ", vehiculo=" + vehiculo + ", mecanico=" + mecanico + ", intervenciones=" + intervenciones
+				+ ", factura=" + factura + ", usada_bono=" + usada_bono + "]";
 	}
 
 	/**
@@ -191,5 +196,15 @@ public class Averia {
 	public void markAsInvoiced() {
 		status = AveriaStatus.FACTURADA;
 	}
-	
+
+	public boolean esElegibleParaBono3() {
+		return (!usada_bono && status.equals(AveriaStatus.FACTURADA)
+				&& factura.getStatus().equals(FacturaStatus.ABONADA)) ? true : false;
+	}
+
+	public void markAsBono3Used() {
+		this.usada_bono = true;
+
+	}
+
 }
