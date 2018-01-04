@@ -3,23 +3,27 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "TMECANICOS")
 public class Mecanico {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(unique = true)
 	private String dni;
 	private String apellidos;
 	private String nombre;
 
-	@OneToMany
+	@OneToMany(mappedBy = "mecanico")
 	private Set<Averia> asignadas = new HashSet<>();
 	@OneToMany(mappedBy = "mecanico")
 	private Set<Intervencion> intervenciones = new HashSet<>();

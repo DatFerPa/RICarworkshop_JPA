@@ -5,38 +5,51 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import uo.ri.model.types.AveriaStatus;
 import uo.ri.model.types.FacturaStatus;
 import uo.ri.util.exception.BusinessException;
+
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames="FECHA, VEHICULO_ID")})
+@Table(name = "TAVERIAS", uniqueConstraints = { @UniqueConstraint(columnNames = "FECHA, VEHICULO_ID") })
 
 public class Averia {
-	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	private String descripcion;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
-	private double importe = 0.0;
+	private Double importe = 0.0;
+	@Enumerated(EnumType.STRING)
 	private AveriaStatus status = AveriaStatus.ABIERTA;
 	private boolean usada_bono;
-	
-	@ManyToOne private Vehiculo vehiculo;
-	@ManyToOne private Mecanico mecanico;
-	@OneToMany(mappedBy="averia") private Set<Intervencion> intervenciones = new HashSet<>();
-	@ManyToOne private Factura factura;
-	
-	Averia(){}
-	
+
+	@ManyToOne
+	private Vehiculo vehiculo;
+	@ManyToOne
+	private Mecanico mecanico;
+	@OneToMany(mappedBy = "averia")
+	private Set<Intervencion> intervenciones = new HashSet<>();
+	@ManyToOne
+	private Factura factura;
+
+	Averia() {
+	}
+
 	public Averia(Vehiculo vehiculo) {
 		super();
 		this.fecha = new Date();
@@ -66,7 +79,7 @@ public class Averia {
 	}
 
 	public Date getFecha() {
-		return (Date) fecha.clone(); // hay que hacer esto porque son mutables
+		return (Date) fecha.clone();
 	}
 
 	public double getImporte() {
@@ -105,7 +118,7 @@ public class Averia {
 	public boolean isUsada_bono() {
 		return usada_bono;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -147,9 +160,7 @@ public class Averia {
 	 * @param mecanico
 	 */
 	public void assignTo(Mecanico mecanico) {
-		// Solo se puede asignar una averia que está ABIERTA
-		// linkado de averia y mecanico
-		// la averia pasa a ASIGNADA
+
 		if (status.equals(AveriaStatus.ABIERTA)) {
 			Association.Asignar.link(mecanico, this);
 			status = AveriaStatus.ASIGNADA;
@@ -161,12 +172,9 @@ public class Averia {
 	 * 
 	 */
 	public void markAsFinished() {
-		// Se verifica que está en estado ASIGNADA
-		// se calcula el importe
-		// se desvincula mecanico y averia
-		// el status cambia a TERMINADA
+
 		if (status.equals(AveriaStatus.ASIGNADA)) {
-			// calcular importe
+
 			calcularImporte();
 			Association.Asignar.unlink(mecanico, this);
 			status = AveriaStatus.TERMINADA;
@@ -175,7 +183,7 @@ public class Averia {
 	}
 
 	private void calcularImporte() {
-		importe = 0;
+		importe = (double) 0;
 		for (Intervencion i : intervenciones) {
 			importe += i.getImporte();
 		}
@@ -186,8 +194,7 @@ public class Averia {
 	 * no ha podido terminar la reparación), pero debe ser pasada a ABIERTA primero
 	 */
 	public void reopen() {
-		// Solo se puede reabrir una averia que está TERMINADA
-		// la averia pasa a ABIERTA
+
 		if (status.equals(AveriaStatus.TERMINADA)) {
 			status = AveriaStatus.ABIERTA;
 		}
@@ -197,8 +204,7 @@ public class Averia {
 	 * Una avería ya facturada se elimina de la factura
 	 */
 	public void markBackToFinished() {
-		// verificar que la averia está FACTURADA
-		// cambiar status a TERMINADA
+
 		if (status.equals(AveriaStatus.FACTURADA)) {
 			status = AveriaStatus.TERMINADA;
 		}
@@ -206,17 +212,17 @@ public class Averia {
 
 	@Override
 	public String toString() {
-		return "Averia [descripcion=" + descripcion + ", fecha=" + fecha + ", importe=" + importe + ", status=" + status
-				+ ", vehiculo=" + vehiculo + ", mecanico=" + mecanico + ", intervenciones=" + intervenciones
-				+ ", factura=" + factura + ", usada_bono=" + usada_bono + "]";
+		return "Averia [id=" + id + ", descripcion=" + descripcion + ", fecha=" + fecha + ", importe=" + importe
+				+ ", status=" + status + ", usada_bono=" + "usada_bono]";
 	}
 
 	/**
 	 * Cambia el estado de la avería a facturada
-	 * @throws BusinessException 
+	 * 
+	 * @throws BusinessException
 	 */
 	public void markAsInvoiced() throws BusinessException {
-		if(factura==null) {
+		if (factura == null) {
 			throw new BusinessException("No factura asignada para esta averia");
 		}
 		status = AveriaStatus.FACTURADA;
@@ -229,12 +235,11 @@ public class Averia {
 
 	public void markAsBono3Used() {
 		this.usada_bono = true;
-
 	}
 
 	public void desassign() {
-		Association.Asignar.unlink(mecanico, this );
-		
+		Association.Asignar.unlink(mecanico, this);
+
 	}
-	
+
 }

@@ -5,11 +5,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import alb.util.date.DateUtil;
 import alb.util.math.Round;
@@ -18,16 +24,21 @@ import uo.ri.model.types.FacturaStatus;
 import uo.ri.util.exception.BusinessException;
 
 @Entity
+@Table(name = "TFACTURAS")
 public class Factura {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(unique = true)
 	private Long numero;
+	@Temporal(TemporalType.DATE)
 	private Date fecha;
-	private double importe;
-	private double iva;
+	private Double importe;
+	private Double iva;
+
+	@Enumerated(EnumType.STRING)
 	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
-	private boolean usada_bono;
+	private boolean usada_bono = false;
 
 	@OneToMany(mappedBy = "factura")
 	private Set<Averia> averias = new HashSet<>();
@@ -120,7 +131,7 @@ public class Factura {
 	public Set<Cargo> getCargos() {
 		return new HashSet<>(cargos);
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -154,14 +165,10 @@ public class Factura {
 	 * Añade la averia a la factura
 	 * 
 	 * @param averia
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	public void addAveria(Averia averia) throws BusinessException {
-		// Verificar que la factura está en estado SIN_ABONAR
-		// Verificar que La averia está TERMINADA
-		// linkar factura y averia
-		// marcar la averia como FACTURADA ( averia.markAsInvoiced() )
-		// calcular el importe
+
 		if (status.equals(FacturaStatus.SIN_ABONAR) && averia.getStatus().equals(AveriaStatus.TERMINADA)) {
 			Association.Facturar.link(averia, this);
 			averia.markAsInvoiced();
@@ -174,10 +181,9 @@ public class Factura {
 	 * factura
 	 */
 	void calcularImporte() {
-		// iva = ...
-		// importe = ...
+
 		iva = (fecha.getTime() > DateUtil.fromDdMmYyyy(1, 7, 2012).getTime()) ? .21 : .18;
-		importe = 0;
+		importe = (double) 0;
 		for (Averia a : averias) {
 			importe += a.getImporte();
 
@@ -193,14 +199,10 @@ public class Factura {
 	 * @param averia
 	 */
 	public void removeAveria(Averia averia) {
-		// verificar que la factura está sin abonar
-		// desenlazar factura y averia
-		// la averia vuelve al estado FINALIZADA ( averia.markBackToFinished() )
-		// volver a calcular el importe
+
 		if (status.equals(FacturaStatus.SIN_ABONAR)) {
 			Association.Facturar.unlink(averia, this);
 			averia.markBackToFinished();
-			// volver a calcular el importe
 			calcularImporte();
 		}
 	}

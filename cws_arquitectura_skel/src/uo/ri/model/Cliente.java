@@ -6,16 +6,19 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import uo.ri.model.types.Address;
 
 @Entity
+@Table(name = "TCLIENTES")
 public class Cliente {
 
 	@Id
@@ -25,6 +28,7 @@ public class Cliente {
 	private String dni;
 	private String nombre;
 	private String apellidos;
+	@Embedded
 	private Address address;
 	private String telefono;
 	private String email;
@@ -33,6 +37,7 @@ public class Cliente {
 	private Set<Vehiculo> vehiculos = new HashSet<Vehiculo>();
 	@OneToMany(mappedBy = "cliente")
 	private Set<MedioPago> mediosPago = new HashSet<>();
+	
 	@OneToMany(mappedBy = "recomendado")
 	private Set<Recomendacion> recomendaciones = new HashSet<>();
 	@OneToOne(mappedBy = "recomendador")
@@ -98,6 +103,7 @@ public class Cliente {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
+
 
 	public String getEmail() {
 		return email;

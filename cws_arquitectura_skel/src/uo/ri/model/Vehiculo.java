@@ -3,14 +3,18 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "TVEHICULOS")
 public class Vehiculo {
 
 	@Id
@@ -19,13 +23,16 @@ public class Vehiculo {
 	private String marca;
 	private String matricula;
 	private String modelo;
-
+	
+	@Column(name="NUM_AVERIAS")
 	private int numAverias = 0;
 
 	@ManyToOne
+	@JoinColumn(name="CLIENTE_ID")
 	private Cliente cliente;
 
 	@ManyToOne
+	@JoinColumn(name="TIPO_ID")
 	private TipoVehiculo tipoVehiculo;
 
 	@OneToMany(mappedBy = "vehiculo")

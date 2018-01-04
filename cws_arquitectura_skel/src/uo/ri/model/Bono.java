@@ -4,11 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
 import uo.ri.util.exception.BusinessException;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "TBONOS")
 public class Bono extends MedioPago {
 
 	private double disponible = 0.0;

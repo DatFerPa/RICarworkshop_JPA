@@ -10,35 +10,37 @@ import javax.persistence.UniqueConstraint;
 
 import uo.ri.model.types.FacturaStatus;
 import uo.ri.util.exception.BusinessException;
+
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames="FACTURA_ID, MEDIOPAGO_ID")})
+@Table(name = "TCARGOS", uniqueConstraints = { @UniqueConstraint(columnNames = "FACTURA_ID, MEDIOPAGO_ID") })
 public class Cargo {
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	@ManyToOne
 	private Factura factura;
 	@ManyToOne
 	private MedioPago medioPago;
-	private double importe = 0.0;
+	private Double importe = 0.0;
 
-	
-	Cargo(){}
+	Cargo() {
+	}
 
 	public Cargo(Factura factura, MedioPago medioPago) {
 		super();
-		validadorDeCargo(factura,medioPago);		
+		validadorDeCargo(factura, medioPago);
 		Association.Cargar.link(factura, this, medioPago);
 	}
 
 	public Cargo(Factura factura, MedioPago medioPago, double importe) throws BusinessException {
 		this(factura, medioPago);
 		medioPago.pagar(importe);
-		this.importe = importe;		
+		this.importe = importe;
 	}
-	
 
 	private void validadorDeCargo(Factura factura, MedioPago medioPago) {
-		
+
 	}
 
 	public Factura getFactura() {
