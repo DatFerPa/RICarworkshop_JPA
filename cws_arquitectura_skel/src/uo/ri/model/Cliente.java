@@ -1,6 +1,8 @@
 package uo.ri.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,34 +11,40 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.OneToOne;
 
 import uo.ri.model.types.Address;
 
 @Entity
 public class Cliente {
-	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(unique=true)
+	@Column(unique = true)
 	private String dni;
 	private String nombre;
 	private String apellidos;
-	
 	private Address address;
-	
-	@OneToMany(mappedBy="cliente") private Set<Vehiculo> vehiculos = new HashSet<Vehiculo>();
-	@Transient private Set<MedioPago> mediosPago = new HashSet<>();
+	private String telefono;
+	private String email;
 
-	Cliente(){}
-	
-	
+	@OneToMany(mappedBy = "cliente")
+	private Set<Vehiculo> vehiculos = new HashSet<Vehiculo>();
+	@OneToMany(mappedBy = "cliente")
+	private Set<MedioPago> mediosPago = new HashSet<>();
+	@OneToMany(mappedBy = "recomendado")
+	private Set<Recomendacion> recomendaciones = new HashSet<>();
+	@OneToOne(mappedBy = "recomendador")
+	private Recomendacion recomendacion_recibida;
+
+	Cliente() {
+	}
+
 	public Cliente(String dni) {
 		super();
 		this.dni = dni;
 	}
-	
-	
 
 	public Cliente(String dni, String nombre, String apellidos) {
 		this(dni);
@@ -44,14 +52,19 @@ public class Cliente {
 		this.apellidos = apellidos;
 	}
 
-
-	public Long getId() {
-		return id;
+	public Cliente(String dni, String nombre, String apellidos, String telefono, String email, Address address) {
+		this(dni, nombre, apellidos);
+		this.setTelefono(telefono);
+		this.email = email;
+		this.address = address;
 	}
-
 
 	public String getNombre() {
 		return nombre;
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public void setNombre(String nombre) {
@@ -76,28 +89,56 @@ public class Cliente {
 
 	public String getDni() {
 		return dni;
-	}		
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Set<Vehiculo> getVehiculos() {
 		return new HashSet<>(vehiculos);
 	}
-	
-	 Set<Vehiculo> _getVehiculos() {
-		
+
+	Set<Vehiculo> _getVehiculos() {
+
 		return vehiculos;
 	}
-	 
-	 
 
 	public Set<MedioPago> getMediosPago() {
 		return new HashSet<>(mediosPago);
 	}
-	
-	 Set<MedioPago> _getMediosPago() {
+
+	Set<MedioPago> _getMediosPago() {
 		return mediosPago;
 	}
 
+	public Set<Recomendacion> getRecomendacionesHechas() {
+		return new HashSet<>(recomendaciones);
+	}
 
+	Set<Recomendacion> _getRecomendacionesHechas() {
+		return recomendaciones;
+	}
+
+	public Recomendacion getRecomendacionRecibida() {
+		return recomendacion_recibida;
+	}
+
+	void _setRecomendacionRecibida(Recomendacion recomendacion_recibida) {
+		this.recomendacion_recibida = recomendacion_recibida;
+	}
 
 	@Override
 	public int hashCode() {
@@ -128,8 +169,18 @@ public class Cliente {
 	public String toString() {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", address=" + address + "]";
 	}
-	
-	
-	
+
+	public List<Averia> getAveriasBono3NoUsadas() {
+		List<Averia> listaAveriasBono3NoUsadas = new ArrayList<>();
+		for (Vehiculo vehiculo : vehiculos) {
+			for (Averia averia : vehiculo.getAverias()) {
+				if (averia.esElegibleParaBono3()) {
+					listaAveriasBono3NoUsadas.add(averia);
+				}
+			}
+		}
+
+		return listaAveriasBono3NoUsadas;
+	}
 
 }

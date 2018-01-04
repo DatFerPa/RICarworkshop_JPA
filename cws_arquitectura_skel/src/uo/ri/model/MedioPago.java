@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import uo.ri.util.exception.BusinessException;
+
 @Entity
 public abstract class MedioPago {
 
@@ -45,7 +47,6 @@ public abstract class MedioPago {
 		return new HashSet<>( cargos );
 	}
 	
-
 	public Long getId() {
 		return id;
 	}
@@ -74,5 +75,7 @@ public abstract class MedioPago {
 			return false;
 		return true;
 	}
+	
+	public abstract void pagar(double i) throws BusinessException ;
 	
 }

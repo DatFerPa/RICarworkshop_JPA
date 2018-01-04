@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import uo.ri.model.types.AveriaStatus;
 import uo.ri.model.types.FacturaStatus;
 import uo.ri.util.exception.BusinessException;
 
+@Entity
 public class Factura {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +27,15 @@ public class Factura {
 	private double importe;
 	private double iva;
 	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
+	private boolean usada_bono;
 
-	@OneToMany(mappedBy="factura") private Set<Averia> averias = new HashSet<>();
-	@OneToMany(mappedBy="factura") private Set<Cargo> cargos = new HashSet<>();
+	@OneToMany(mappedBy = "factura")
+	private Set<Averia> averias = new HashSet<>();
+	@OneToMany(mappedBy = "factura")
+	private Set<Cargo> cargos = new HashSet<>();
 
-	Factura() {}
+	Factura() {
+	}
 
 	public Factura(Long numero) {
 		super();
@@ -65,12 +71,6 @@ public class Factura {
 		}
 
 	}
-	
-	
-
-	public Long getId() {
-		return id;
-	}
 
 	public Date getFecha() {
 		return fecha;
@@ -93,6 +93,14 @@ public class Factura {
 		return importe;
 	}
 
+	public boolean isUsada_bono() {
+		return usada_bono;
+	}
+
+	public void setUsada_bono(boolean usada_bono) {
+		this.usada_bono = usada_bono;
+	}
+
 	public FacturaStatus getStatus() {
 		return status;
 	}
@@ -111,6 +119,10 @@ public class Factura {
 
 	public Set<Cargo> getCargos() {
 		return new HashSet<>(cargos);
+	}
+	
+	public Long getId() {
+		return id;
 	}
 
 	@Override
@@ -142,8 +154,9 @@ public class Factura {
 	 * Añade la averia a la factura
 	 * 
 	 * @param averia
+	 * @throws BusinessException 
 	 */
-	public void addAveria(Averia averia) {
+	public void addAveria(Averia averia) throws BusinessException {
 		// Verificar que la factura está en estado SIN_ABONAR
 		// Verificar que La averia está TERMINADA
 		// linkar factura y averia
@@ -196,6 +209,10 @@ public class Factura {
 	public String toString() {
 		return "Factura [numero=" + numero + ", fecha=" + fecha + ", importe=" + importe + ", iva=" + iva + ", status="
 				+ status + "]";
+	}
+
+	public void settle() {
+		this.status = FacturaStatus.ABONADA;
 	}
 
 }

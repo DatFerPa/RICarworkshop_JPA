@@ -8,33 +8,34 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
 @Entity
 public class Mecanico {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String dni;
 	private String apellidos;
 	private String nombre;
-	
-	@OneToMany private Set<Averia> asignadas = new HashSet<>();
-	@OneToMany(mappedBy="mecanico") private Set<Intervencion> intervenciones = new HashSet<>();
-	
+
+	@OneToMany
+	private Set<Averia> asignadas = new HashSet<>();
+	@OneToMany(mappedBy = "mecanico")
+	private Set<Intervencion> intervenciones = new HashSet<>();
+
+	Mecanico() {
+	}
+
 	public Mecanico(String dni) {
 		super();
 		this.dni = dni;
 	}
 
 	public Mecanico(String dni, String nombre, String apellidos) {
-		this( dni );
+		this(dni);
 		this.nombre = nombre;
 		this.apellidos = apellidos;
-	}
-	
-	Mecanico(){}
-
-	public Long getId() {
-		return id;
 	}
 
 	public String getApellidos() {
@@ -43,6 +44,10 @@ public class Mecanico {
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+	
+	public Long getId() {
+		return id;
 	}
 
 	public String getNombre() {
@@ -60,9 +65,9 @@ public class Mecanico {
 	Set<Averia> _getAsignadas() {
 		return asignadas;
 	}
-	
+
 	public Set<Averia> getAsignadas() {
-		return new HashSet<>( asignadas );
+		return new HashSet<>(asignadas);
 	}
 
 	Set<Intervencion> _getIntervenciones() {
@@ -70,7 +75,7 @@ public class Mecanico {
 	}
 
 	public Set<Intervencion> getIntervenciones() {
-		return new HashSet<>( intervenciones );
+		return new HashSet<>(intervenciones);
 	}
 
 	@Override
