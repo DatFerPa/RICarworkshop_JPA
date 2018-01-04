@@ -18,6 +18,8 @@ public class Recomendacion {
 	private Cliente recomendador;
 	private Cliente recomendado;
 	private boolean usada_bono;
+	
+	Recomendacion(){}
 
 	public Recomendacion(Cliente recomendador, Cliente recomendado) {
 		super();

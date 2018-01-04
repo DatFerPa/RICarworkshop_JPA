@@ -19,7 +19,7 @@ public class Repuesto {
 	private String descripcion;
 	private double precio;
 
-	@OneToMany(mappedBy = "sustitucion")
+	@OneToMany(mappedBy = "repuesto")
 	private Set<Sustitucion> sustituciones = new HashSet<>();
 
 	Repuesto() {

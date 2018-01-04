@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import uo.ri.model.exception.BusinessException;
 import uo.ri.model.types.AveriaStatus;
 import uo.ri.model.types.FacturaStatus;
 
+@Entity
 public class Factura {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +29,13 @@ public class Factura {
 	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
 	private boolean usada_bono;
 
-	@OneToMany(mappedBy="factura") private Set<Averia> averias = new HashSet<>();
-	@OneToMany(mappedBy="factura") private Set<Cargo> cargos = new HashSet<>();
+	@OneToMany(mappedBy = "factura")
+	private Set<Averia> averias = new HashSet<>();
+	@OneToMany(mappedBy = "factura")
+	private Set<Cargo> cargos = new HashSet<>();
 
-	Factura() {}
+	Factura() {
+	}
 
 	public Factura(Long numero) {
 		super();
@@ -115,8 +120,6 @@ public class Factura {
 	public Set<Cargo> getCargos() {
 		return new HashSet<>(cargos);
 	}
-	
-	
 
 	@Override
 	public int hashCode() {
