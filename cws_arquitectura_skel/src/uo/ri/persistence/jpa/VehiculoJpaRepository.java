@@ -4,31 +4,17 @@ import java.util.List;
 
 import uo.ri.business.repository.VehiculoRepository;
 import uo.ri.model.Vehiculo;
+import uo.ri.persistence.jpa.util.BaseRepository;
+import uo.ri.persistence.jpa.util.Jpa;
 
-public class VehiculoJpaRepository implements VehiculoRepository {
+public class VehiculoJpaRepository extends BaseRepository<Vehiculo>  implements VehiculoRepository {
 
-	@Override
-	public void add(Vehiculo t) {
-		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void remove(Vehiculo t) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Vehiculo findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Vehiculo> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Vehiculo> findByClienteId(Long id) {
+		return Jpa.getManager()
+				.createNamedQuery("Vehiculo.findByClienteId",Vehiculo.class)
+				.setParameter(1, id)
+				.getResultList();
 	}
 
 }

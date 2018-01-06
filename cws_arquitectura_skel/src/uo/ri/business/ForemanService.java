@@ -11,12 +11,11 @@ public interface ForemanService {
 
 	void deleteClient(long id) throws BusinessException;
 
-	ClientDto findClientByDni(String dni) throws BusinessException;
-
 	void updateClient(ClientDto dto) throws BusinessException;
 
 	ClientDto findClientById(Long id) throws BusinessException;
 
 	List<ClientDto> findAllClients() throws BusinessException;
+	
 
 }

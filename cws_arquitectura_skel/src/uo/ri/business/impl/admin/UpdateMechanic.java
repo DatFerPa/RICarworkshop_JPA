@@ -1,5 +1,6 @@
 package uo.ri.business.impl.admin;
 
+import alb.util.assertion.Argument;
 import uo.ri.business.dto.MechanicDto;
 import uo.ri.business.impl.Command;
 import uo.ri.business.repository.MecanicoRepository;
@@ -16,6 +17,7 @@ public class UpdateMechanic implements Command<Void>{
 	}
 
 	public Void execute() throws BusinessException {
+		Argument.isNotNull(dto);
 		MecanicoRepository r = Factory.repository.forMechanic();
 		Mecanico m = r.findById(dto.id);
 		m.setApellidos(dto.surname);
