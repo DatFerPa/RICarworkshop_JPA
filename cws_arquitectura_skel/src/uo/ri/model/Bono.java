@@ -20,7 +20,7 @@ public class Bono extends MedioPago {
 
 	Bono() {
 	}
-	
+
 	public Bono(String codigo) {
 		this.codigo = codigo;
 		this.descripcion = "";
@@ -34,6 +34,11 @@ public class Bono extends MedioPago {
 	public Bono(String codigo, String descripcion, double disponible) {
 		this(codigo, disponible);
 		this.descripcion = descripcion;
+	}
+
+	public Bono(String codigo, String descripcion, double disponible, Cliente cliente) {
+		this(codigo, descripcion, disponible);
+		Association.Pagar.link(this, cliente);
 	}
 
 	public double getDisponible() {
