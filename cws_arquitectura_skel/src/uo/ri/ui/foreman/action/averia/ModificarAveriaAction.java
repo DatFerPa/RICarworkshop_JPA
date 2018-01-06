@@ -1,4 +1,4 @@
-package uo.ri.ui.foreman.action;
+package uo.ri.ui.foreman.action.averia;
 
 import alb.util.menu.Action;
 import uo.ri.util.exception.BusinessException;

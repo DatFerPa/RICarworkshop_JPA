@@ -4,6 +4,7 @@ import java.util.List;
 
 import alb.util.console.Console;
 import uo.ri.business.dto.BreakdownDto;
+import uo.ri.business.dto.ClientDto;
 import uo.ri.business.dto.InvoiceDto;
 import uo.ri.business.dto.MechanicDto;
 import uo.ri.business.dto.PaymentMeanDto;
@@ -60,6 +61,19 @@ public class Printer {
 				, m.dni
 				, m.name
 				, m.surname
+			);
+	}
+	
+	public static void printCLiente(ClientDto c) {
+		Console.printf("\t %-10.10s %-25.25s %-25.25s %-25.25s %-25.25s %-25.25s %-25.25s %-25.25s\n",
+				c.dni
+				, c.name
+				, c.surname
+				, c.phone
+				, c.email
+				, c.addressCity
+				, c.addressStreet
+				, c.addressZipcode
 			);
 	}
 

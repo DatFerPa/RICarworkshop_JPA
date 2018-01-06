@@ -242,4 +242,12 @@ public class Averia {
 
 	}
 
+	public boolean isUsadaBono3() {
+		return isUsada_bono();
+	}
+
+	public boolean isInvoiced() {
+		return (status.equals(AveriaStatus.FACTURADA)) ? true : false;
+	}
+
 }

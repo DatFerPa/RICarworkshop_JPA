@@ -20,12 +20,15 @@ public class Bono extends MedioPago {
 
 	Bono() {
 	}
+	
+	public Bono(String codigo) {
+		this.codigo = codigo;
+		this.descripcion = "";
+	}
 
 	public Bono(String codigo, double disponible) {
-		super();
-		this.codigo = codigo;
+		this(codigo);
 		this.disponible = disponible;
-		this.descripcion = "";
 	}
 
 	public Bono(String codigo, String descripcion, double disponible) {

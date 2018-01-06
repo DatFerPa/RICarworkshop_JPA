@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import uo.ri.model.Association;
 import uo.ri.model.Averia;
 import uo.ri.model.Cliente;
@@ -17,10 +20,6 @@ import uo.ri.model.Sustitucion;
 import uo.ri.model.TipoVehiculo;
 import uo.ri.model.Vehiculo;
 import uo.ri.model.types.FacturaStatus;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import uo.ri.util.exception.BusinessException;
 
 public class AveriaTest {

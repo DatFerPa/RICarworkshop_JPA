@@ -217,4 +217,8 @@ public class Factura {
 		this.status = FacturaStatus.ABONADA;
 	}
 
+	public boolean isBono500Used() {
+		return false;
+	}
+
 }

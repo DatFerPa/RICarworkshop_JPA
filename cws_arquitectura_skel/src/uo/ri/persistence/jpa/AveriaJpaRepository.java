@@ -23,4 +23,11 @@ public class AveriaJpaRepository
 		return null;
 	}
 
+	@Override
+	public List<Averia> findWithUnusedBono3ByClienteId(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }

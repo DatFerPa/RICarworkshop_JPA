@@ -8,5 +8,8 @@ public interface RepositoryFactory {
 	FacturaRepository forFactura();
 	ClienteRepository forCliente();
 	RepuestoRepository forRepuesto();
+	RecomendacionRepository forRecomendacion();
+	CargoRepository forCargo();
+	VehiculoRepository forVehiculo();
 
 }

@@ -31,6 +31,11 @@ public class DtoAssembler {
 		 dto.dni = c.getDni();
 		 dto.name = c.getNombre();
 		 dto.surname = c.getApellidos();
+		 dto.phone = c.getPhone();
+		 dto.email = c.getEmail();
+		 dto.addressCity = c.getAddress().getCity();
+		 dto.addressStreet = c.getAddress().getStreet();
+		 dto.addressZipcode = c.getAddress().getZipCode();
 		 
 		 return dto;
 	}
@@ -44,7 +49,7 @@ public class DtoAssembler {
 	}
 
 	public static Cliente toEntity(ClientDto dto) {
-		Cliente c = new Cliente(dto.dni, dto.name, dto.surname);
+		Cliente c = new Cliente(dto.dni, dto.name, dto.surname,dto.phone,dto.email);
 		Address addr = new Address(
 				dto.addressStreet, dto.addressCity, dto.addressZipcode );
 		c.setAddress( addr );

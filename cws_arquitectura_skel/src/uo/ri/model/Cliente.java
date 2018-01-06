@@ -56,11 +56,15 @@ public class Cliente {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 	}
+	
+	public Cliente(String dni, String nombre, String apellidos, String telefono, String email) {
+		this(dni,nombre,apellidos);
+		this.telefono = telefono;
+		this.email = email;
+	}
 
 	public Cliente(String dni, String nombre, String apellidos, String telefono, String email, Address address) {
-		this(dni, nombre, apellidos);
-		this.setTelefono(telefono);
-		this.email = email;
+		this(dni, nombre, apellidos,telefono,email);
 		this.address = address;
 	}
 
@@ -68,7 +72,7 @@ public class Cliente {
 		return nombre;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -96,11 +100,11 @@ public class Cliente {
 		return dni;
 	}
 
-	public String getTelefono() {
+	public String getPhone() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
+	public void setPhone(String telefono) {
 		this.telefono = telefono;
 	}
 

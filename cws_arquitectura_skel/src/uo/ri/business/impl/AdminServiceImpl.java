@@ -41,4 +41,11 @@ public class AdminServiceImpl implements AdminService {
 		return executor.execute(new FindMechanicById(id));
 	}
 
+	@Override
+	public int generateVouchers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 }

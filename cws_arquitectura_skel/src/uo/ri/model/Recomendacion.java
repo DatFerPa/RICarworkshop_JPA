@@ -1,10 +1,30 @@
 package uo.ri.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name = "TRECOMENDACIONES",uniqueConstraints = {@UniqueConstraint(columnNames = "RECOMENDADOR_ID, RECOMENDADO_ID")})
 public class Recomendacion {
 
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@OneToOne
 	private Cliente recomendador;
+	@ManyToOne
 	private Cliente recomendado;
 	private boolean usada_bono;
+	
+	Recomendacion(){}
 
 	public Recomendacion(Cliente recomendador, Cliente recomendado) {
 		super();
@@ -28,11 +48,11 @@ public class Recomendacion {
 		this.recomendador = recomendador;
 	}
 
-	public boolean isUsada_bono() {
+	public boolean isUsada() {
 		return usada_bono;
 	}
 
-	public void setUsada_bono(boolean usada_bono) {
+	public void setUsada(boolean usada_bono) {
 		this.usada_bono = usada_bono;
 	}
 

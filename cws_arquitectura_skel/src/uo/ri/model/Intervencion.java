@@ -40,6 +40,11 @@ public class Intervencion {
 		Association.Intervenir.link(averia, this, mecanico);
 	}
 
+	public Intervencion(Mecanico m, Averia a, int minutes) {
+		this(m,a);
+		this.minutos = minutes;
+	}
+
 	public Averia getAveria() {
 		return averia;
 	}
