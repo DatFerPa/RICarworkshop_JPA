@@ -13,9 +13,8 @@ public interface AdminService {
 
 	MechanicDto findMechanicById(Long id) throws BusinessException;
 	List<MechanicDto> findAllMechanics() throws BusinessException;
-	//se generan los bono
-	int generateVouchers();
 	
-	// resto de métodos que faltan...
+	int generateVouchers() throws BusinessException;
+	
 
 }

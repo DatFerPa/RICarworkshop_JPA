@@ -13,20 +13,23 @@ public class AveriaJpaRepository
 
 	@Override
 	public List<Averia> findByIds(List<Long> idsAveria) {
-		// TODO Auto-generated method stub
-		return Jpa.getManager().createNamedQuery("Averia.findByIds",Averia.class).setParameter(1,idsAveria).getResultList();
+		return Jpa.getManager()
+				.createNamedQuery("Averia.findByIds",Averia.class)
+				.setParameter(1,idsAveria)
+				.getResultList();
 	}
 
 	@Override
 	public List<Averia> findNoFacturadasByDni(String dni) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Averia> findWithUnusedBono3ByClienteId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return Jpa.getManager()
+				.createNamedQuery("Averia.NoBono3ById",Averia.class)
+				.setParameter(1, id)
+				.getResultList();
 	}
 
 

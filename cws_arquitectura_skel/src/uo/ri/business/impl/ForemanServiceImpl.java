@@ -43,7 +43,8 @@ public class ForemanServiceImpl implements ForemanService {
 	public List<ClientDto> findAllClients() throws BusinessException {
 		return executor.execute(new FindAllClients());
 	}
-
+	
+	@Override
 	public List<ClientDto> findClientesRecomendadosPor(Long id) throws BusinessException {
 		return executor.execute(new FindRecomendedBy(id));
 	}	

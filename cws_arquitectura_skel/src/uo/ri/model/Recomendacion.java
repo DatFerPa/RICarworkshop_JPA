@@ -107,4 +107,9 @@ public class Recomendacion {
 				+ usada_bono + "]";
 	}
 
+	public void markAsUsadaBono() {
+		this.usada_bono = true;
+		
+	}
+
 }

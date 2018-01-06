@@ -33,8 +33,8 @@ public class Factura {
 	private Long numero;
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
-	private Double importe;
-	private Double iva;
+	private Double importe = 0.0;
+	private Double iva = 0.0;
 
 	@Enumerated(EnumType.STRING)
 	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
@@ -213,12 +213,51 @@ public class Factura {
 				+ status + "]";
 	}
 
-	public void settle() {
+	public void settle() throws BusinessException {
+		if (averias.isEmpty()) {
+			throw new BusinessException("No se puede liquidar una factura sin averías");
+		}
+		
+		if(importe==0 && cargos.isEmpty()) {
+			this.status = FacturaStatus.ABONADA;
+			return;
+		}
+		
+		if (!comprobacionEnMargen()) {
+			throw new BusinessException("Pago de la factura no se encuentra dentro del +-0.01€ de margen");
+		}
+
 		this.status = FacturaStatus.ABONADA;
+
+	}
+
+	private boolean comprobacionEnMargen() {
+		double dineroCargado = 0;
+		for (Cargo c : cargos) {
+			dineroCargado += c.getImporte();
+		}
+		return (dineroCargado <= importe + 0.01 && dineroCargado >= importe - 0.01) ? true : false;
+
 	}
 
 	public boolean isBono500Used() {
-		return false;
+		return usada_bono;
+	}
+
+	public boolean puedeGenerarBono500() {
+		return (status.equals(FacturaStatus.ABONADA) && usada_bono == false && importe > 500) ? true : false;
+	}
+
+	public boolean isSettled() {
+		return (status.equals(FacturaStatus.ABONADA)) ? true : false;
+	}
+
+	public void markAsBono500Used() throws BusinessException {
+		if (isSettled() && importe >= 500) {
+			usada_bono = true;
+		} else {
+			throw new BusinessException("No se puede marcar como usada una factura no pagada");
+		}
 	}
 
 }

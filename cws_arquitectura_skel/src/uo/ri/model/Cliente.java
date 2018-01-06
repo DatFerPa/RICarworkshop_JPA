@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -38,7 +37,7 @@ public class Cliente {
 	private Set<Vehiculo> vehiculos = new HashSet<Vehiculo>();
 	@OneToMany(mappedBy = "cliente")
 	private Set<MedioPago> mediosPago = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "recomendado")
 	private Set<Recomendacion> recomendaciones = new HashSet<>();
 	@OneToOne(mappedBy = "recomendador")
@@ -57,15 +56,15 @@ public class Cliente {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 	}
-	
+
 	public Cliente(String dni, String nombre, String apellidos, String telefono, String email) {
-		this(dni,nombre,apellidos);
+		this(dni, nombre, apellidos);
 		this.telefono = telefono;
 		this.email = email;
 	}
 
 	public Cliente(String dni, String nombre, String apellidos, String telefono, String email, Address address) {
-		this(dni, nombre, apellidos,telefono,email);
+		this(dni, nombre, apellidos, telefono, email);
 		this.address = address;
 	}
 
@@ -108,7 +107,6 @@ public class Cliente {
 	public void setPhone(String telefono) {
 		this.telefono = telefono;
 	}
-
 
 	public String getEmail() {
 		return email;
@@ -192,6 +190,53 @@ public class Cliente {
 		}
 
 		return listaAveriasBono3NoUsadas;
+	}
+
+	public boolean elegibleBonoPorRecomendaciones() {
+		if (vehiculos.isEmpty() == false) {
+			boolean sinAverias = false;
+			for (Vehiculo v : vehiculos) {
+				if (v.getAverias().isEmpty()) {
+					sinAverias = true;
+				}
+			}
+			if (sinAverias) {
+				return false;
+			} else {
+				if (recomendaciones.isEmpty()) {
+					return false;
+				} else {
+					int recomendacionesValidas = 0;
+					for (Recomendacion r : recomendaciones) {
+						if (!r.isUsada()) {
+							if (!r.getRecomendado().getVehiculos().isEmpty()) {
+								boolean vehiculoConAverias = false;
+								for (Vehiculo v : r.getRecomendado().getVehiculos()) {
+									if (!v.getAverias().isEmpty()) {
+										vehiculoConAverias = true;
+									}
+
+								}
+								if (vehiculoConAverias) {
+									recomendacionesValidas++;
+								}
+							}
+						}
+
+					}
+					
+					if(recomendacionesValidas-3 >=0) {
+						return true;
+					}else {
+						return false;
+					}
+
+				}
+			}
+
+		} else {
+			return false;
+		}
 	}
 
 }

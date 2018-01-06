@@ -36,8 +36,10 @@ public class ClienteJpaRepository
 
 	@Override
 	public List<Cliente> findRecomendedBy(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return Jpa.getManager()
+		.createNamedQuery("Cliente.findRecomendedBy",Cliente.class)
+		.setParameter(1, id)
+		.getResultList();
 	}
 
 
