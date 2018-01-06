@@ -36,11 +36,13 @@ public class DeleteCliente implements Command<Void> {
 			rr.remove(rRealizada);
 		}
 		if (c.getRecomendacionRecibida() != null) {
-			Association.Recomendar.unlink(c.getRecomendacionRecibida().getRecomendador(), c.getRecomendacionRecibida(),
+			Recomendacion r = c.getRecomendacionRecibida();
+			Association.Recomendar.unlink(c.getRecomendacionRecibida().getRecomendador(), r,
 					c);
+			rr.remove(r);
 		}
 		for (MedioPago m : c.getMediosPago()) {
-			Association.Pagar.unlink(c, m);
+			//Association.Pagar.unlink(c, m);
 			mp.remove(m);
 		}
 		cr.remove(c);

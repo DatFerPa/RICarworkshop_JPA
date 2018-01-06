@@ -10,26 +10,27 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "TRECOMENDACIONES",uniqueConstraints = {@UniqueConstraint(columnNames = "RECOMENDADOR_ID, RECOMENDADO_ID")})
+@Table(name = "TRECOMENDACIONES", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "RECOMENDADOR_ID, RECOMENDADO_ID") })
 public class Recomendacion {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@OneToOne
 	private Cliente recomendador;
 	@ManyToOne
 	private Cliente recomendado;
 	private boolean usada_bono;
-	
-	Recomendacion(){}
+
+	Recomendacion() {
+	}
 
 	public Recomendacion(Cliente recomendador, Cliente recomendado) {
 		super();
-		
-		Association.Recomendar.link(recomendador,this,recomendado);
+
+		Association.Recomendar.link(recomendador, this, recomendado);
 	}
 
 	public Cliente getRecomendado() {
@@ -60,14 +61,14 @@ public class Recomendacion {
 		Association.Recomendar.unlink(recomendador, this, recomendado);
 	}
 
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((recomendado == null) ? 0 : recomendado.hashCode());
 		result = prime * result + ((recomendador == null) ? 0 : recomendador.hashCode());
+		result = prime * result + (usada_bono ? 1231 : 1237);
 		return result;
 	}
 
@@ -80,6 +81,11 @@ public class Recomendacion {
 		if (getClass() != obj.getClass())
 			return false;
 		Recomendacion other = (Recomendacion) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (recomendado == null) {
 			if (other.recomendado != null)
 				return false;
@@ -90,6 +96,8 @@ public class Recomendacion {
 				return false;
 		} else if (!recomendador.equals(other.recomendador))
 			return false;
+		if (usada_bono != other.usada_bono)
+			return false;
 		return true;
 	}
 
@@ -98,7 +106,5 @@ public class Recomendacion {
 		return "Recomendacion [recomendador=" + recomendador + ", recomendado=" + recomendado + ", usada_bono="
 				+ usada_bono + "]";
 	}
-	
-	
 
 }

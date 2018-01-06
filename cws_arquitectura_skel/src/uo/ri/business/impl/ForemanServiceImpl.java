@@ -8,7 +8,7 @@ import uo.ri.business.impl.foreman.AddCliente;
 import uo.ri.business.impl.foreman.DeleteCliente;
 import uo.ri.business.impl.foreman.FindAllClients;
 import uo.ri.business.impl.foreman.FindClienteById;
-import uo.ri.business.impl.foreman.FindClientesRecomendadosPor;
+import uo.ri.business.impl.foreman.FindRecomendedBy;
 import uo.ri.business.impl.foreman.UpdateCliente;
 import uo.ri.conf.Factory;
 import uo.ri.util.exception.BusinessException;
@@ -45,7 +45,7 @@ public class ForemanServiceImpl implements ForemanService {
 	}
 
 	public List<ClientDto> findClientesRecomendadosPor(Long id) throws BusinessException {
-		return executor.execute(new FindClientesRecomendadosPor(id));
+		return executor.execute(new FindRecomendedBy(id));
 	}	
 
 }

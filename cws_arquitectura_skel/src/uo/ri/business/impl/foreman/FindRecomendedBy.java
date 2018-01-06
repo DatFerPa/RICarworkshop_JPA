@@ -6,11 +6,11 @@ import uo.ri.business.dto.ClientDto;
 import uo.ri.business.impl.Command;
 import uo.ri.util.exception.BusinessException;
 
-public class FindClientesRecomendadosPor implements Command<List<ClientDto>>{
+public class FindRecomendedBy implements Command<List<ClientDto>>{
 	
 	private Long id;
 	
-	public FindClientesRecomendadosPor(Long id) {
+	public FindRecomendedBy(Long id) {
 		this.id = id;
 	}
 	
