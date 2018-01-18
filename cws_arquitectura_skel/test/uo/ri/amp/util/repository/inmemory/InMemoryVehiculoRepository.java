@@ -7,5 +7,4 @@ public class InMemoryVehiculoRepository
 		extends BaseMemoryRepository<Vehiculo> 
 		implements VehiculoRepository {
 
-
 }

@@ -13,7 +13,7 @@ import uo.ri.util.exception.BusinessException;
 @Table(name = "TBONOS")
 public class Bono extends MedioPago {
 
-	private double disponible = 0.0;
+	private Double disponible = 0.0;
 	private String descripcion;
 	@Column(unique = true)
 	private String codigo;
@@ -38,14 +38,14 @@ public class Bono extends MedioPago {
 
 	public Bono(String codigo, String descripcion, double disponible, Cliente cliente) {
 		this(codigo, descripcion, disponible);
-		Association.Pagar.link(this, cliente);
+		Association.Pagar.link(cliente, this);
 	}
 
-	public double getDisponible() {
+	public Double getDisponible() {
 		return disponible;
 	}
 
-	public void setDisponible(double disponible) {
+	public void setDisponible(Double disponible) {
 		this.disponible = disponible;
 	}
 

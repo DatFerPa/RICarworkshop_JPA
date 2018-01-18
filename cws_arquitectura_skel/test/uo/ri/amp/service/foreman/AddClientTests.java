@@ -33,7 +33,6 @@ public class AddClientTests extends BaseServiceTests {
 		Long WITHOUT_RECOMENDATION = null;
 		
 		ForemanService svc = Factory.service.forForeman();
-		
 		svc.addClient(client, WITHOUT_RECOMENDATION );
 		
 		Cliente expected = FixtureRepository.findClientByDni( client.dni );

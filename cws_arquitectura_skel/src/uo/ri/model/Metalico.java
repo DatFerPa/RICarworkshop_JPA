@@ -9,12 +9,12 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "TMETALICOS")
 public class Metalico extends MedioPago {
-	
+
 	Metalico() {
 	}
 
 	public Metalico(Cliente cliente) {
-		Association.Pagar.link(this, cliente);
+		Association.Pagar.link(cliente, this);
 	}
 
 	public void pagar(double i) {

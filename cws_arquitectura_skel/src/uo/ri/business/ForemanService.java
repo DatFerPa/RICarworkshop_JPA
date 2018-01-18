@@ -16,7 +16,5 @@ public interface ForemanService {
 	ClientDto findClientById(Long id) throws BusinessException;
 
 	List<ClientDto> findAllClients() throws BusinessException;
-	
-	List<ClientDto> findClientesRecomendadosPor(Long id) throws BusinessException;
 
 }

@@ -241,12 +241,12 @@ public class PersistenceTest {
 		
 		Bono bono = new Bono("B-100", 100.0);
 		bono.setDescripcion( "Voucher just for testing" );
-		Association.Pagar.link(bono, cliente);
+		Association.Pagar.link(cliente, bono);
 		
 		TarjetaCredito tarjetaCredito = new TarjetaCredito( "1234567" );
 		tarjetaCredito.setTipo("Visa");
 		tarjetaCredito.setValidez( DateUtil.inYearsTime( 1 ) );
-		Association.Pagar.link(tarjetaCredito, cliente);
+		Association.Pagar.link(cliente, tarjetaCredito);
 		
 		Metalico metalico = new Metalico( cliente );
 		
@@ -319,10 +319,10 @@ public class PersistenceTest {
 		res.add( s.getIntervencion().getAveria().getFactura() );
 		
 		Cliente cl = mapper.merge(cliente);
-		res.add( cl );
 		for(MedioPago mp: cl.getMediosPago()) {
 			res.add( mp );
 		}
+		res.add( cl );
 		
 		return res;
 	}

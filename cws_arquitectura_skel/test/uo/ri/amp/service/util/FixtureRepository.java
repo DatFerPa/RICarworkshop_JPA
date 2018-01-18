@@ -107,7 +107,7 @@ public class FixtureRepository {
 
 	public static TarjetaCredito registerNewCreditCardForClient(Cliente c) {
 		TarjetaCredito tc = registerNewCreditCard();
-		Association.Pagar.link(tc, c);
+		Association.Pagar.link(c, tc);
 		return tc;
 	}
 

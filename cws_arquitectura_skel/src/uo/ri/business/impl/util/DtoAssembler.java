@@ -35,7 +35,7 @@ public class DtoAssembler {
 		 dto.email = c.getEmail();
 		 dto.addressCity = c.getAddress().getCity();
 		 dto.addressStreet = c.getAddress().getStreet();
-		 dto.addressZipcode = c.getAddress().getZipCode();
+		 dto.addressZipcode = c.getAddress().getZipcode();
 		 
 		 return dto;
 	}
